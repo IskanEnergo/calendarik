@@ -11,7 +11,7 @@ env-down:
 	docker compose down calendarik-postgres
 
 env-cleanup:
-	docker compose down calendarik-postgres
+	docker compose down calendarik-postgres port-forwarder
 	if exist out\pgdata rmdir /S out\pgdata
 
 env-port-forward:
@@ -35,8 +35,13 @@ migrate-down:
 	make migrate-action action=down
 
 migrate-action:
-	docker-compose run --rm calendarik-postgres-migrate \
+	docker compose run --rm calendarik-postgres-migrate \
 		-path /migrations \
 		-database postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@calendarik-postgres:5432/${POSTGRES_DB}?sslmode=disable \
 		"$(action)"
 
+calendarik-run:
+	@set "LOGGER_FOLDER=$(PROJECT_ROOT)\out\logs" && \
+	set "POSTGRES_HOST=localhost" && \
+	go mod tidy && \
+	go run cmd/calendarik/main.go

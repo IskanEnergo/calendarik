@@ -12,7 +12,7 @@ env-down:
 
 env-cleanup:
 	docker compose down calendarik-postgres port-forwarder
-	if exist out\pgdata rmdir /S out\pgdata
+	if exist out\pgdata rmdir /S $(PROJECT_ROOT)\out\pgdata
 
 env-port-forward:
 	docker compose up -d port-forwarder
@@ -44,4 +44,4 @@ calendarik-run:
 	@set "LOGGER_FOLDER=$(PROJECT_ROOT)\out\logs" && \
 	set "POSTGRES_HOST=localhost" && \
 	go mod tidy && \
-	go run cmd/calendarik/main.go
+	go run $(PROJECT_ROOT)/cmd/calendarik/main.go

@@ -15,6 +15,9 @@ env-cleanup:
 	docker compose down calendarik-postgres port-forwarder
 	if exist $(PROJECT_ROOT)\out\pgdata rmdir /S $(PROJECT_ROOT)\out\pgdata
 
+logs-cleanup:
+	if exist $(PROJECT_ROOT)\out\logs rmdir /S $(PROJECT_ROOT)\out\logs
+
 env-port-forward:
 	docker compose up -d port-forwarder
 

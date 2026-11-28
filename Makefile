@@ -1,18 +1,22 @@
 include .env
 export
 
-export PROJECT_ROOT=$(CURDIR)
+export PROJECT_ROOT=$(subst /,\,$(CURDIR))
 
+build: env-port-forward env-up migrate-up
 
 env-up:
-	docker compose up -d calendarik-postgres
+	docker compose up -d --wait calendarik-postgres
 
 env-down:
 	docker compose down calendarik-postgres
 
 env-cleanup:
 	docker compose down calendarik-postgres port-forwarder
-	if exist out\pgdata rmdir /S $(PROJECT_ROOT)\out\pgdata
+	if exist $(PROJECT_ROOT)\out\pgdata rmdir /S $(PROJECT_ROOT)\out\pgdata
+
+logs-cleanup:
+	if exist $(PROJECT_ROOT)\out\logs rmdir /S $(PROJECT_ROOT)\out\logs
 
 env-port-forward:
 	docker compose up -d port-forwarder
